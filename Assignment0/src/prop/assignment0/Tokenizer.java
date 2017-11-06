@@ -1,6 +1,9 @@
 package prop.assignment0;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.io.IOException;
+import java.lang.StringBuilder;
 
 public class Tokenizer implements ITokenizer {
 
@@ -8,58 +11,119 @@ public class Tokenizer implements ITokenizer {
 
 	private int numberValMin = 48;
 	private int numberValMax = 57;
-	
+
 	private int letterValMin = 97;
 	private int letterValMax = 122;
-			
-	
+
 	public Tokenizer() {
 		scanner = new Scanner();
 	}
 
+	@Override
 	public void open(String fileName) throws IOException, TokenizerException {
 		scanner.open(fileName);
 	}
 
+	@Override
 	public Lexeme current() {
-		try {
-			moveNext();
-		} 
-		catch (IOException | TokenizerException e) {
-			System.out.println(e);
-			return new Lexeme(null, Token.NULL);
+		char c = getFirstChar();
+		if (c == Scanner.NULL)
+		{
+			return new Lexeme(c, Token.NULL);
 		}
-		char c = scanner.current();
+		else if (c == Scanner.EOF)
+		{
+			return new Lexeme(c, Token.EOF);
+		}
+		
 		Token token = findTypeOfToken(c);
-
-		return null;
-	}
-	
-	private Token findTypeOfToken(char c)
-	{
-		int charValue = c;
-		if (charValue >= numberValMin && charValue <= numberValMax)
+		if (token == Token.INT_LIT || token == Token.IDENT)	
 		{
-			return Token.INT_LIT;
+			return getMultipleChars(token, c);
 		}
-		else if (charValue >= letterValMin && charValue <= letterValMax)
-		{
+		return new Lexeme(c,token);
+	}
+
+
+	private char getFirstChar() {
+		char c = Scanner.NULL;
+		do {
+			c = scanner.current();
+			try {
+				moveNext();
+			} catch (IOException | TokenizerException e) {
+				System.out.println(e);
+				return Scanner.NULL;
+			}
+		} while (c == Scanner.NULL);
+		return c;
+	}
+
+	private Token findTypeOfToken(char c) {
+		int charValue = c;
+		if (charValue >= numberValMin && charValue <= numberValMax) {
+			return Token.INT_LIT;
+		} else if (charValue >= letterValMin && charValue <= letterValMax) {
 			return Token.IDENT;
 		}
-		switch(c)
-		{
-			case '':
-				
-				break;
+		switch (c) {
+		case '{':
+			return Token.LEFT_CURLY;
+		case '=':
+			return Token.ASSIGN_OP;
+		case ';':
+			return Token.SEMICOLON;
+		case '+':
+			return Token.ADD_OP;
+		case '-':
+			return Token.SUB_OP;
+		case '*':
+			return Token.MULT_OP;
+		case '/':
+			return Token.DIV_OP;
+		case '(':
+			return Token.LEFT_PAREN;
+		case ')':
+			return Token.RIGHT_PAREN;
+		case '}':
+			return Token.RIGHT_CURLY;
 		}
-
 		return Token.NULL;
 	}
+	
+	
+	private Lexeme getMultipleChars(Token token, char c)
+	{
+		StringBuilder sb = new StringBuilder(c);
+		boolean addingNumber = token == Token.INT_LIT;
+		char nextC;
+		while(true)
+		{
+			try {
+				moveNext();
+				nextC = scanner.current();
+				if (addingNumber && Character.isDigit(nextC) || !addingNumber && Character.isLetter(nextC))
+				{
+					sb.append(nextC);
+				}
+				else
+				{
+					return new Lexeme(sb.toString(),token);
+				}
+			} catch (IOException | TokenizerException e) {
+				System.out.println(e);
+				return new Lexeme(sb.toString(),Token.NULL);
+			}
+		}
+		
+	}
 
+	@Override
 	public void moveNext() throws IOException, TokenizerException {
 		scanner.moveNext();
 	}
 
+	@Override
 	public void close() throws IOException {
 		scanner.close();
 	}
