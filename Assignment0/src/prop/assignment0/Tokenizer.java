@@ -21,7 +21,14 @@ public class Tokenizer implements ITokenizer {
 
 	@Override
 	public void open(String fileName) throws IOException, TokenizerException {
+		try
+		{
 		scanner.open(fileName);
+		}
+		catch(IOException e)
+		{
+			throw e;
+		}
 	}
 
 	@Override
@@ -120,11 +127,25 @@ public class Tokenizer implements ITokenizer {
 
 	@Override
 	public void moveNext() throws IOException, TokenizerException {
+		try
+		{
 		scanner.moveNext();
+		}
+		catch (IOException e)
+		{
+			throw e;
+		}
 	}
 
 	@Override
 	public void close() throws IOException {
+		try
+		{
 		scanner.close();
+		}
+		catch (IOException e)
+		{
+			throw e;
+		}
 	}
 }
