@@ -1,0 +1,12 @@
+package prop.assignment0;
+
+import org.junit.Test;
+
+public class testTokenizer {
+
+	@Test
+	public void testTokenizer()
+	{
+		
+	}
+}

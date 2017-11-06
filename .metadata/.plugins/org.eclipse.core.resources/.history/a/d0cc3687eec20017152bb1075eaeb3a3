@@ -1,0 +1,38 @@
+package prop.assignment0;
+
+import java.io.IOException;
+
+public class Tokenizer implements ITokenizer {
+
+	private Scanner scanner;
+
+	public Tokenizer() {
+		scanner = new Scanner();
+	}
+
+	public void open(String fileName) throws IOException, TokenizerException {
+		scanner.open(fileName);
+	}
+
+	public Lexeme current() {
+		try {
+			moveNext();
+		} catch (IOException | TokenizerException e) {
+			System.out.println(e);
+			return new Lexeme(null, Token.NULL);
+		}
+		char c = scanner.current();
+		int testChar = c;
+		System.out.println(testChar + " CHECK");
+
+		return null;
+	}
+
+	public void moveNext() throws IOException, TokenizerException {
+		scanner.moveNext();
+	}
+
+	public void close() throws IOException {
+		scanner.close();
+	}
+}
