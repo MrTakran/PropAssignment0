@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><testrun name="testTokenizer" project="Assignment0" tests="1" started="1" failures="0" errors="0" ignored="0">
-  <testsuite name="prop.assignment0.testTokenizer" time="0.001" uniqueid="[engine:junit-vintage]/[runner:prop.assignment0.testTokenizer]">
-    <testcase name="testTokenizer" classname="prop.assignment0.testTokenizer" time="0.001" displayname="testTokenizer" uniqueid="[engine:junit-vintage]/[runner:prop.assignment0.testTokenizer]/[test:testTokenizer(prop.assignment0.testTokenizer)]"/>
-  </testsuite>
-</testrun>
