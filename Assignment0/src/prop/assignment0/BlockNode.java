@@ -1,29 +1,37 @@
 package prop.assignment0;
 
-import java.util.ArrayList;
 
 public class BlockNode implements INode {
 
-	private Tokenizer t;
 	private StatementsNode statement;
 	
 	
 	public BlockNode(Tokenizer t) throws ParserException {
-		boolean buildStatements = true;
-		this.t = t;
+		
 		Lexeme l = t.current();
 		if(l.token() != Token.LEFT_CURLY) {
-			throw new ParserException("No left curly brace in begining of block");
+			throw new ParserException("Left_Curly_Missing");
 		}
-		while(buildStatements) {
-			
+		t.moveNext();
+		try {
 			statement = new StatementsNode(t);
-			//fånga något som kollar att det inte går att göra fler statements
-				
+		}
+		catch(ParserException pe) {
+			if(pe.getMessage().equals("No_Id")) {
+				statement = null;
+			}
+			else {
+				throw pe;
+			}
 		}
 		l = t.current();
 		if(l.token() != Token.RIGHT_CURLY) {
-			throw new ParserException("No right curly brace at the end of block");
+			throw new ParserException("Right_Curly_Missing");
+		}
+		t.moveNext();
+		l = t.current();
+		if(l.token() != Token.EOF) {
+			throw new ParserException("EOF_Missing");
 		}
 	}
 	@Override

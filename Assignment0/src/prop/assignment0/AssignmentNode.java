@@ -2,11 +2,33 @@ package prop.assignment0;
 
 public class AssignmentNode implements INode {
 
-	private Tokenizer t;
 	private ExpressionNode expression;
-	public AssignmentNode(Tokenizer t) {
-		this.t = t;
-		expression = new ExpressionNode(t);
+	
+	public AssignmentNode(Tokenizer t) throws ParserException{
+		t.moveNext();
+		Lexeme l = t.current();
+		if(l.token() != Token.IDENT) {
+			throw new ParserException("No_Id");
+		}
+		t.moveNext();
+		l = t.current();
+		if(l.token() != Token.ASSIGN_OP) {
+			throw new ParserException("Assign_Operator_Missing");
+		}
+		t.moveNext();
+		l = t.current();
+		try {
+			expression = new ExpressionNode(t);
+		}
+		catch(ParserException pe) {
+			throw pe;
+		}
+		t.moveNext();
+		l = t.current();
+		if(l.token() != Token.SEMICOLON) {
+			throw new ParserException("No_Semicolon");
+		}
+		
 	}
 	@Override
 	public Object evaluate(Object[] args) throws Exception {
