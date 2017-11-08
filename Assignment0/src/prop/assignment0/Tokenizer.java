@@ -33,7 +33,7 @@ public class Tokenizer implements ITokenizer {
 
 	@Override
 	public Lexeme current() {
-		char c = getChar();
+		char c = getFirstChar();
 		if (c == Scanner.NULL)
 		{
 			return new Lexeme(c, Token.NULL);
@@ -52,9 +52,9 @@ public class Tokenizer implements ITokenizer {
 	}
 
 
-	private char getChar() {
-		char c = scanner.current();
-		while (c == Scanner.NULL) {
+	private char getFirstChar() {
+		char c = Scanner.NULL;
+		do {
 			c = scanner.current();
 			try {
 				moveNext();
@@ -62,7 +62,7 @@ public class Tokenizer implements ITokenizer {
 				System.out.println(e);
 				return Scanner.NULL;
 			}
-		} 
+		} while (c == Scanner.NULL);
 		return c;
 	}
 
