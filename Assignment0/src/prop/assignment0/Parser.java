@@ -14,7 +14,15 @@ public class Parser implements IParser {
 	@Override
 	public INode parse() throws IOException, TokenizerException, ParserException
 	{
-		return new BlockNode(t);
+		try
+		{
+			t.buildLexemes();
+			return new BlockNode(t);
+		}
+		catch (Exception e)
+		{
+			throw e;
+		}
 	}
 	@Override
 	public void close() throws IOException 
