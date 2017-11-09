@@ -5,6 +5,7 @@ public class TermNode implements INode {
 	private FactorNode factor;
 	private Lexeme multOrDiv;
 	private TermNode term;
+	private boolean hasMultOrDiv = true;
 	
 	public TermNode(Tokenizer t) throws ParserException {
 		try {
@@ -16,7 +17,7 @@ public class TermNode implements INode {
 		t.moveNext();
 		multOrDiv = t.current();
 		if(multOrDiv.token() == Token.MULT_OP || multOrDiv.token() == Token.DIV_OP) {
-			t.moveNext();
+			
 			try {
 				term = new TermNode(t);
 			}
@@ -24,6 +25,9 @@ public class TermNode implements INode {
 				throw pe;
 			}
 			
+		}
+		else {
+			hasMultOrDiv = false;
 		}
 	}
 	@Override
@@ -34,7 +38,12 @@ public class TermNode implements INode {
 
 	@Override
 	public void buildString(StringBuilder builder, int tabs) {
-		
+		TabInserter.tabber(builder, tabs, "TermNode");
+		factor.buildString(builder, tabs + 1);
+		if(hasMultOrDiv) {
+			TabInserter.tabber(builder, tabs + 1, multOrDiv.toString());
+			term.buildString(builder, tabs + 1);
+		}
 	}
 
 }

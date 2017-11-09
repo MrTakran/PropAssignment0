@@ -3,30 +3,35 @@ package prop.assignment0;
 public class FactorNode implements INode {
 
 	private Lexeme intOrId;
+	private Lexeme lParen;
+	private Lexeme rParen;
 	private ExpressionNode expression;
+	private boolean hasIntOrId = false;
+	
 	
 	public FactorNode(Tokenizer t) throws ParserException{
 		t.moveNext();
-		Lexeme l = t.current();
-		if(l.token() != Token.INT_LIT && l.token() != Token.IDENT) {
-			if(l.token() != Token.LEFT_PAREN) {
+		intOrId = t.current();
+		if(intOrId.token() != Token.INT_LIT && intOrId.token() != Token.IDENT) {
+			if(intOrId.token() != Token.LEFT_PAREN) {
+				System.out.println(intOrId.toString());
 				throw new ParserException("No_Left_Parenthesis");
 			}
-			t.moveNext();
+			lParen = intOrId;
 			try {
 				expression = new ExpressionNode(t);
 			}
 			catch(ParserException pe) {
 				throw pe;
 			}
-			t.moveNext();
-			l = t.current();
-			if(l.token() != Token.RIGHT_PAREN) {
+			//t.moveNext();
+			rParen = t.current();
+			if(rParen.token() != Token.RIGHT_PAREN) {
 				throw new ParserException("No_Right_Parenthesis");
 			}
-
 		}
 		else {
+			hasIntOrId = true;
 			intOrId = t.current();
 		}
 				
@@ -39,6 +44,16 @@ public class FactorNode implements INode {
 
 	@Override
 	public void buildString(StringBuilder builder, int tabs) {
+		TabInserter.tabber(builder, tabs, "FactorNode");
+		if(hasIntOrId) {
+			TabInserter.tabber(builder, tabs + 1, intOrId.toString());
+		}
+		else {
+			TabInserter.tabber(builder, tabs + 1, lParen.toString());
+			expression.buildString(builder, tabs + 1);
+			TabInserter.tabber(builder, tabs + 1, rParen.toString());
+		}
+		
 		
 	}
 
