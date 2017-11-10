@@ -1,5 +1,7 @@
 package prop.assignment0;
 
+import java.util.TreeMap;
+
 public class AssignmentNode implements INode {
 
 	private ExpressionNode expression;
@@ -33,6 +35,9 @@ public class AssignmentNode implements INode {
 	}
 	@Override
 	public Object evaluate(Object[] args) throws Exception {
+		
+		TreeMap<String, Double> valuesMap = (TreeMap<String, Double>)args[0];
+		valuesMap.put(id.value().toString(), (Double)expression.evaluate(new Object[] {(Object)valuesMap}));
 		
 		return null;
 	}

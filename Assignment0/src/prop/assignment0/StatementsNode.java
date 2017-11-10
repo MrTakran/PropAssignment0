@@ -29,6 +29,11 @@ public class StatementsNode implements INode {
 	}
 	@Override
 	public Object evaluate(Object[] args) throws Exception {
+		if(assignment != null) {
+			assignment.evaluate(args);
+			statement.evaluate(args);
+			
+		}
 		
 		return null;
 	}

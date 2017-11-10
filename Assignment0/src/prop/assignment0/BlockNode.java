@@ -1,5 +1,7 @@
 package prop.assignment0;
 
+import java.util.TreeMap;
+import java.util.Set;
 
 public class BlockNode implements INode {
 
@@ -38,9 +40,15 @@ public class BlockNode implements INode {
 	}
 	@Override
 	public Object evaluate(Object[] args) throws Exception {
+		StringBuilder sb = new StringBuilder();
+		TreeMap<String, Double> valuesMap = new TreeMap<String, Double>();
+		statement.evaluate(new Object[] {(Object)valuesMap});
+		Set<String> keys = valuesMap.keySet();
+		for(String key : keys) {
+			sb.append(key + " = " + valuesMap.get(key) +"\n");
+		}
 		
-		
-		return null;
+		return sb.toString();
 	}
 
 	@Override

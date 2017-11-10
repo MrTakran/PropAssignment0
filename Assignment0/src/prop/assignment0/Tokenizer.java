@@ -130,7 +130,15 @@ public class Tokenizer implements ITokenizer {
 					sb.append(nextC);
 				} else {
 					moveToNext = false;
-					return new Lexeme(sb.toString(), token);
+					String value = sb.toString();
+					if (addingNumber)
+					{
+						return new Lexeme(Double.parseDouble(value),token);
+					}
+					else
+					{
+						return new Lexeme(value, token);
+					}
 				}
 				scanner.moveNext();
 			} catch (IOException e) {

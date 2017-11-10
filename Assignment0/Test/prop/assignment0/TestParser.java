@@ -17,6 +17,8 @@ public class TestParser {
 			BlockNode block = (BlockNode)p.parse();
 			StringBuilder sb = new StringBuilder();
 			block.buildString(sb, 0);
+			sb.append("\nEVALUATION:\n");
+			sb.append(block.evaluate(null));
 			BufferedWriter writer = null;
 			try
 			{

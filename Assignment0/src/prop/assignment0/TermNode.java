@@ -1,5 +1,7 @@
 package prop.assignment0;
 
+import java.util.ArrayList;
+
 public class TermNode implements INode {
 
 	private FactorNode factor;
@@ -33,7 +35,46 @@ public class TermNode implements INode {
 	@Override
 	public Object evaluate(Object[] args) throws Exception {
 		
-		return null;
+		double value = (double)factor.evaluate(args);
+		
+		if(hasMultOrDiv) {
+			if(args.length == 1) {
+				ArrayList<Lexeme> calcList = new ArrayList<Lexeme>();
+				calcList.add(multOrDiv);
+				term.evaluate(new Object[] {args[0], calcList});
+				for (int i = 0; i < calcList.size(); i++)
+				{
+					Token operator = calcList.get(i).token();
+					i++;
+					if (operator == Token.MULT_OP)
+					{
+						value *= (double)calcList.get(i).value();
+					}
+					else
+					{
+						value /= (double)calcList.get(i).value();
+					}
+				}
+				return value;
+			}
+			else {
+				ArrayList<Lexeme> calcList = (ArrayList<Lexeme>)args[1];
+				calcList.add(new Lexeme(value, Token.INT_LIT));
+				calcList.add(multOrDiv);
+				term.evaluate(args);
+				return null;
+			}
+		}
+		if (args.length == 1)
+		{
+			return value;
+		}
+		else
+		{
+			ArrayList<Lexeme> calcList = (ArrayList<Lexeme>)args[1];
+			calcList.add(new Lexeme(value, Token.INT_LIT));
+			return null;
+		}
 	}
 
 	@Override

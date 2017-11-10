@@ -14,10 +14,10 @@ public class ExpressionNode implements INode {
 		catch(ParserException pe) {
 			throw pe;
 		}
-		//t.moveNext();
+		
 		addOrSub = t.current();
 		if(addOrSub.token() == Token.ADD_OP || addOrSub.token() == Token.SUB_OP) {
-			//t.moveNext();
+			
 			try {
 				expression = new ExpressionNode(t);
 			}
@@ -32,8 +32,18 @@ public class ExpressionNode implements INode {
 	}
 	@Override
 	public Object evaluate(Object[] args) throws Exception {
+		double value = (double)term.evaluate(args);
+		if(hasAddOrSub) {
+			double expValue = (double)expression.evaluate(args);
+			if(addOrSub.token() == Token.ADD_OP) {
+				value += expValue;
+			}
+			else {
+				value -= expValue;
+			}
+		}
 		
-		return null;
+		return value;
 	}
 
 	@Override

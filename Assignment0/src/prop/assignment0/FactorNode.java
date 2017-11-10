@@ -1,5 +1,7 @@
 package prop.assignment0;
 
+import java.util.TreeMap;
+
 public class FactorNode implements INode {
 
 	private Lexeme intOrId;
@@ -24,7 +26,6 @@ public class FactorNode implements INode {
 			catch(ParserException pe) {
 				throw pe;
 			}
-			//t.moveNext();
 			rParen = t.current();
 			if(rParen.token() != Token.RIGHT_PAREN) {
 				throw new ParserException("No_Right_Parenthesis");
@@ -39,7 +40,24 @@ public class FactorNode implements INode {
 	@Override
 	public Object evaluate(Object[] args) throws Exception {
 		
-		return null;
+		if(hasIntOrId) {
+			if(intOrId.token() == Token.INT_LIT) {
+				return (double)intOrId.value();
+			}
+			else {
+				TreeMap<String, Double> valuesMap = (TreeMap<String, Double>)args[0];
+				String id = intOrId.value().toString();
+				if(!valuesMap.containsKey(id)) {
+					valuesMap.put(id, 0.0);
+				}
+				return valuesMap.get(id);
+			}
+		}
+		else {
+			return (double)expression.evaluate(args);
+		}
+		
+		
 	}
 
 	@Override
